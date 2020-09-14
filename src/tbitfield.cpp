@@ -62,7 +62,7 @@ void TBitField::ClrBit(const int n) // очистить бит
 int TBitField::GetBit(const int n) const // получить значение бита
 {
 	if (n < 0 || n > BitLen) throw exception("Negative or too large index.");
-	return (pMem[GetMemIndex(n)] >> (n % BitLen)) & 1u;
+	return (pMem[GetMemIndex(n)] >> (n % (sizeof(TELEM) * 8))) & 1u;
 }
 
 // битовые операции
@@ -89,7 +89,7 @@ int TBitField::operator==(const TBitField &bf) const // сравнение
 
 int TBitField::operator!=(const TBitField &bf) const // сравнение
 {
-	return (*this == bf) == 1 ? 0 : 1;
+	return !(*this == bf);
 }
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
