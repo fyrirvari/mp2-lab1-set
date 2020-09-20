@@ -49,19 +49,19 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
-	if (n < 0 || n > BitLen) throw exception("Negative or too large index.");
+	if (n < 0 || BitLen <= n) throw exception("Negative or too large index.");
 	pMem[GetMemIndex(n)] |= GetMemMask(n);
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
-	if (n < 0 || n > BitLen) throw exception("Negative or too large index.");
+	if (n < 0 || BitLen <= n) throw exception("Negative or too large index.");
 	pMem[GetMemIndex(n)] &= ~GetMemMask(n);
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-	if (n < 0 || n > BitLen) throw exception("Negative or too large index.");
+	if (n < 0 || BitLen <= n) throw exception("Negative or too large index.");
 	return (pMem[GetMemIndex(n)] >> (n % (sizeof(TELEM) * 8))) & 1u;
 }
 
@@ -82,8 +82,8 @@ int TBitField::operator==(const TBitField &bf) const // сравнение
 {
 	if (this->BitLen != bf.BitLen) return 0;
 	else
-		for (int i = 0; i < this->BitLen; i++)
-			if (this->GetBit(i) != bf.GetBit(i)) return 0;
+		for (int i = 0; i < this->MemLen; i++)
+			if (this->pMem[i] != bf.pMem[i]) return 0;
 	return 1;
 }
 
